@@ -76,10 +76,11 @@ pyyaml==5.4.1
 redis==3.5.3; python_version < "3.0"
 redis==4.0.2; python_version > "3.0"
 requests-kerberos==0.12.0
+requests-toolbelt==0.9.1
 requests-unixsocket==0.2.0
-requests==2.25.0
+requests==2.27.1; python_version < "3.0"
+requests==2.27.1; python_version > "3.0"
 requests_ntlm==1.1.0
-requests_toolbelt==0.9.1
 rethinkdb==2.4.4
 scandir==1.8
 securesystemslib[crypto,pynacl]==0.20.1

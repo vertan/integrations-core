@@ -15,7 +15,7 @@
     "windows"
   ],
   "process_signatures": [
-    "weblogic.Server"
+    "java weblogic.Server"
   ],
   "public_title": "WebLogic",
   "categories": [
@@ -25,7 +25,7 @@
 
   ],
   "type": "check",
-  "is_public": false,
+  "is_public": true,
   "integration_id": "weblogic",
   "assets": {
     "configuration": {

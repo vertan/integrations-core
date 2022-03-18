@@ -122,11 +122,16 @@ class SQLServer(AgentCheck):
                     # Valid values for this can be found at
                     # https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/database.md#connection-level-attributes
                     'dbms': 'mssql',
-                    'replace_digits': obfuscator_options_config.get('replace_digits', False),
-                    'return_json_metadata': obfuscator_options_config.get('collect_metadata', False),
-                    'table_names': obfuscator_options_config.get('collect_tables', True),
-                    'collect_commands': obfuscator_options_config.get('collect_commands', True),
-                    'collect_comments': obfuscator_options_config.get('collect_comments', True),
+                    'replace_digits': is_affirmative(
+                        obfuscator_options_config.get(
+                            'replace_digits',
+                            obfuscator_options_config.get('quantize_sql_tables', False),
+                        )
+                    ),
+                    'return_json_metadata': is_affirmative(obfuscator_options_config.get('collect_metadata', True)),
+                    'table_names': is_affirmative(obfuscator_options_config.get('collect_tables', True)),
+                    'collect_commands': is_affirmative(obfuscator_options_config.get('collect_commands', True)),
+                    'collect_comments': is_affirmative(obfuscator_options_config.get('collect_comments', True)),
                 }
             )
         )
@@ -358,8 +363,7 @@ class SQLServer(AgentCheck):
 
         # Load database files
         for name, column, metric_type in DATABASE_FILES_IO:
-            cfg = {'name': name, 'column': column, 'tags': tags}
-
+            cfg = {'name': name, 'column': column, 'tags': tags, 'hostname': self.resolved_hostname}
             metrics_to_collect.append(SqlFileStats(cfg, None, getattr(self, metric_type), column, self.log))
 
         # Load AlwaysOn metrics
@@ -569,6 +573,8 @@ class SQLServer(AgentCheck):
             # Lookup metrics classes by their associated table
             metric_type_str, cls = metrics.TABLE_MAPPING[table]
             metric_type = getattr(self, metric_type_str)
+
+        cfg_inst['hostname'] = self.resolved_hostname
 
         return cls(cfg_inst, base_name, metric_type, column, self.log)
 
