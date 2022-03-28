@@ -282,9 +282,5 @@ def instance_username(field, value):
     return get_default_field_value(field, value)
 
 
-def instance_warn_on_missing_components(field, value):
-    return False
-
-
 def instance_web_endpoint(field, value):
     return get_default_field_value(field, value)

@@ -109,7 +109,6 @@ class InstanceConfig(BaseModel):
     use_legacy_auth_encoding: Optional[bool]
     user: Optional[str]
     username: Optional[str]
-    warn_on_missing_components: Optional[bool]
     web_endpoint: Optional[str]
 
     @root_validator(pre=True)

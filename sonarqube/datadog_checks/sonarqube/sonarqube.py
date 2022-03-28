@@ -23,7 +23,6 @@ class SonarqubeCheck(AgentCheck):
 
         # Construct the component data on the first check run
         self._components = None
-        self.warn_missing_components = self.instance.get('warn_on_missing_components', False)
 
         self.check_initializations.append(self.parse_config)
 
@@ -68,18 +67,10 @@ class SonarqubeCheck(AgentCheck):
                 components_notfound.append(component)
 
         if components_notfound:
-            if self.warn_missing_components:
-                # Puts the integration in WARNING state showing a list of components that were not found.
-                self.warning(
-                    'The following components specified did not match any available components: %s',
-                    components_notfound,
-                )
-            else:
-                # Logs a warning like above but will maintain OK state.
-                self.log.warning(
-                    'The following components specified did not match any available components: %s',
-                    components_notfound,
-                )
+            self.log.warning(
+                'The following components specified did not match any available components: %s',
+                components_notfound,
+            )
 
     def discover_available_metrics(self):
         metadata_collected = False
